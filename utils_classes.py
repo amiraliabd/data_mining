@@ -1,3 +1,5 @@
+import pprint
+
 import pandas as pd
 
 
@@ -33,6 +35,10 @@ class ProjectPreProcessing(BasePreProcessing):
 
         return self.cleaned_data
 
+    def clean_string_column(self, attribute):
+        self.cleaned_data[attribute] = self.cleaned_data[attribute].apply(lambda a: str(a).strip())
+
     def _integrate_rows(self):
+        self.clean_string_column("Description")
         df = self.cleaned_data.astype(str)
         return df.groupby("InvoiceNo")["Description"].apply(",".join)
