@@ -81,13 +81,8 @@ class ProjectPreProcessing:
 
         for items in series_of_items_descriptions:
             matrix.append([0 for _ in range(count_of_all_titles)])
+
             for each_item in items.split(","):
-
-                if not description_title_table.get(each_item):
-                    # todo: we have empty values here
-                    print(type(each_item))
-                    print(items)
-
                 matrix[-1][description_title_table.get(each_item)] = 1
 
         self.final_matrix = matrix
