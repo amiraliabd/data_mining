@@ -28,11 +28,25 @@ class ProjectPreProcessing:
         ].index
         self.cleaned_data = df.drop(useless_data_indexes)
 
+    @staticmethod
+    def _clean_colons(obj):
+        obj = str(obj)
+        list_obj = obj.split(",")
+
+        for index in range(len(list_obj)):
+            list_obj[index] = list_obj[index].strip()
+
+        obj = ",".join(list_obj)
+
+        obj.replace(",,", ",")
+
+        if obj[-1] == ",":
+            obj = obj[:-1]
+
+        return obj
+
     def _clean_string_column(self, attribute):
-        self.cleaned_data[attribute] = self.cleaned_data[attribute].apply(lambda a: str(a).strip())
-        # todo: it needs to be cleaned and improved for performance
-        self.cleaned_data[attribute] = self.cleaned_data[attribute].apply(lambda a: a.replace(", ", ","))
-        self.cleaned_data[attribute] = self.cleaned_data[attribute].apply(lambda a: a.replace(" ,", ","))
+        self.cleaned_data[attribute] = self.cleaned_data[attribute].apply(self._clean_colons)
 
     def _integrate_rows(self) -> pd.Series:
         df = self.cleaned_data.astype(str)
@@ -72,7 +86,7 @@ class ProjectPreProcessing:
                 if not description_title_table.get(each_item):
                     # todo: we have empty values here
                     print(type(each_item))
-                    print("shit")
+                    print(items)
 
                 matrix[-1][description_title_table.get(each_item)] = 1
 
