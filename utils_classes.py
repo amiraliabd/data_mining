@@ -3,7 +3,7 @@ import pandas as pd
 import pprint
 
 
-class ProjectPreProcessing:
+class PreProcessing:
 
     def __init__(self, file_absolute_path):
         self.raw_data: Optional[pd.DataFrame] = None
@@ -86,3 +86,19 @@ class ProjectPreProcessing:
                 matrix[-1][description_title_table.get(each_item)] = 1
 
         self.final_matrix = matrix
+
+
+class AssociationMining:
+    def __init__(self, min_support):
+        self.min_support = None
+        self.growth_result = None
+        self.apriori_result = None
+
+    def fp_growth(self):
+        pass
+
+    def apriori(self):
+        pass
+
+    def rule_mining(self):
+        pass
