@@ -16,7 +16,7 @@ p.build_matrix()
 df = pd.DataFrame(data=p.final_matrix, columns=set(p.description_titles))
 
 
-a = AssociationMining(0.05, df)
+a = AssociationMining(0.02, df)
 
 # FpGrowth
 print("processing data with FPGrowth algorithm")

@@ -95,11 +95,12 @@ class AssociationMining:
         self.growth_result = None
         self.apriori_result = None
 
-    def fp_growth(self, use_colnames=None):
-        return fp(self.df, self.min_support, use_colnames=use_colnames)
+    def fp_growth(self):
+        return fp(self.df, self.min_support)
 
-    def apriori(self, use_colnames=None):
-        return apr(self.df, self.min_support, use_colnames=use_colnames)
+    def apriori(self):
+        return apr(self.df, self.min_support)
 
-    def rule_mining(self, fi, min_threshold):
+    @staticmethod
+    def rule_mining(fi, min_threshold):
         return association_rules(fi, metric="confidence", min_threshold=min_threshold)
