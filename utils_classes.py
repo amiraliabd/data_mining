@@ -1,7 +1,6 @@
 from typing import Optional
 import pandas as pd
-from mlxtend.frequent_patterns import fpgrowth, association_rules, apriori
-from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import fpgrowth as fp, association_rules, apriori as apr
 
 
 class PreProcessing:
@@ -89,29 +88,18 @@ class PreProcessing:
         self.final_matrix = matrix
 
 
-from mlxtend.frequent_patterns import fpgrowth
-
-
 class AssociationMining:
-    def __init__(self, min_support):
+    def __init__(self, min_support, df):
         self.min_support = min_support
+        self.df = df
         self.growth_result = None
         self.apriori_result = None
 
-    def fp_growth(self, df, use_colnames=None):
-        return fpgrowth(df, self.min_support, use_colnames=use_colnames)
+    def fp_growth(self, use_colnames=None):
+        return fp(self.df, self.min_support, use_colnames=use_colnames)
 
-    def apriori(self, description_titles):
-        te = TransactionEncoder()
-        te_ary = te.fit(description_titles).transform(description_titles)
-        df = pd.DataFrame(te_ary, columns=te.columns_)
-        result = apriori(df, min_support=self.min_support)
-        return result
+    def apriori(self, use_colnames=None):
+        return apr(self.df, self.min_support, use_colnames=use_colnames)
 
-    def rule_mining(self, description_titles, min_threshold):
-        te = TransactionEncoder()
-        te_ary = te.fit(description_titles).transform(description_titles)
-        df = pd.DataFrame(te_ary, columns=te.columns_)
-        frequent_itemsets = self.fp_growth(df, use_colnames=True)
-        res = association_rules(frequent_itemsets, metric="confidence", min_threshold=min_threshold)
-        return res
+    def rule_mining(self, fi, min_threshold):
+        return association_rules(fi, metric="confidence", min_threshold=min_threshold)

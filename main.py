@@ -12,44 +12,25 @@ path = os.path.abspath('example_data.csv')
 p = PreProcessing(path)
 p.read_data()
 p.reduction()
-# print(tabulate(df, headers='keys', tablefmt='psql'))
-df = p.cleaned_data
-# pprint(df[df["Description"] == "WHITE HANGING HEART T-LIGHT HOLDER"])
 p.build_matrix()
-# print(p.final_matrix)
+df = pd.DataFrame(data=p.final_matrix, columns=set(p.description_titles))
 
 
-
-a = AssociationMining(0.6)
-dataf = pd.DataFrame(data=p.final_matrix, columns=set(p.description_titles))
+a = AssociationMining(0.05, df)
 
 # FpGrowth
-# print(a.fp_growth(dataf))
+print("processing data with FPGrowth algorithm")
+fi1 = a.fp_growth()
+print(fi1)
 
 # Apriori
-# frequent_itemsets = a.apriori(p.description_titles)
-# print(frequent_itemsets)
+print("processing data with apriori algorithm")
+fi2 = a.apriori()
+print(fi2)
 
 # Association Rules
-# print(a.rule_mining(p.description_titles,0.85))
-
-
-# ---------------------
-
-
-# te = TransactionEncoder()
-# te_ary = te.fit(p.description_titles).transform(p.description_titles)
-# daf = pd.DataFrame(te_ary, columns=te.columns_)
-# frequent_itemsets = fpgrowth(daf, min_support=0.6, use_colnames=True)
-# res = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
-# print(res)
-
-# ---------------------
-# te = TransactionEncoder()
-# te_ary = te.fit(p.description_titles).transform(p.description_titles)
-# daaf = pd.DataFrame(te_ary, columns=te.columns_)
-# ap = apriori(daaf, min_support=0.6)
-# print()
-# print(ap)
+print("rule mining")
+print(a.rule_mining(min_threshold=0.85, fi=fi1))
+print(a.rule_mining(min_threshold=0.85, fi=fi2))
 
 
